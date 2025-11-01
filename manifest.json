@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+  "name": "AeScape - 天气驱动沉浸式体验",
+  "version": "2.0.0",
+  "description": "融合天气数据与沉浸式视频动画的新标签页扩展，让每一次打开新标签页都成为一次与自然的邂逅",
+  
+  "permissions": [
+    "storage",
+    "geolocation",
+    "activeTab"
+  ],
+  
+  "host_permissions": [
+    "https://api.openweathermap.org/*"
+  ],
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; media-src 'self' blob:;"
+  },
+  
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["css/content.css"],
+      "js": ["js/content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AeScape 天气助手",
+    "default_icon": {
+      "16": "icon/icon16.png",
+      "32": "icon/icon32.png",
+      "48": "icon/icon48.png",
+      "128": "icon/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icon/icon16.png",
+    "32": "icon/icon32.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "video/*",
+        "css/*",
+        "js/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

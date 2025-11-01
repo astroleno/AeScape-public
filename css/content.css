@@ -1,0 +1,217 @@
+/**
+ * 天景 AeScape - 内容脚本样式
+ * 确保悬浮球在所有网站都能正确显示
+ */
+
+#aescape-floating-ball {
+  position: fixed !important;
+  bottom: 80px !important;
+  right: 20px !important;
+  width: 60px !important;
+  height: 60px !important;
+  /* background将由JavaScript动态设置主题色 */
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10000 !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  /* color将由JavaScript动态设置主题色 */
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#aescape-floating-ball .ball-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#aescape-floating-ball .weather-icon {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  display: block !important;
+}
+
+#aescape-floating-ball .temperature {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  display: block !important;
+  /* color继承自父元素，由JavaScript设置主题色 */
+}
+
+#aescape-floating-ball .location-name {
+  font-size: 8px !important;
+  opacity: 0.8 !important;
+  margin-top: 1px !important;
+  max-width: 50px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  /* color继承自父元素，由JavaScript设置主题色 */
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+#aescape-floating-ball .ball-tooltip {
+  position: absolute !important;
+  bottom: 70px !important;
+  right: 0 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+  padding: 6px 10px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: all 0.2s ease !important;
+  pointer-events: none !important;
+  z-index: 10001 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  margin: 0 !important;
+  border: none !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif !important;
+}
+
+#aescape-floating-ball:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+}
+
+#aescape-detail-panel {
+  position: fixed !important;
+  bottom: 150px !important;
+  right: 20px !important;
+  width: 280px !important;
+  /* background将由JavaScript动态设置主题色 */
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  z-index: 10001 !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  /* color将由JavaScript动态设置主题色 */
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  #aescape-floating-ball {
+    bottom: 60px !important;
+    right: 15px !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  #aescape-floating-ball .weather-icon {
+    font-size: 16px !important;
+  }
+  
+  #aescape-floating-ball .temperature {
+    font-size: 9px !important;
+  }
+  
+  #aescape-floating-ball .location-name {
+    font-size: 7px !important;
+    max-width: 40px !important;
+  }
+  
+  #aescape-detail-panel {
+    width: 260px !important;
+    bottom: 120px !important;
+    right: 15px !important;
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #aescape-floating-ball {
+    bottom: 50px !important;
+    right: 10px !important;
+  }
+  
+  #aescape-detail-panel {
+    width: calc(100vw - 40px) !important;
+    max-width: 280px !important;
+    right: 20px !important;
+    left: 20px !important;
+    bottom: 110px !important;
+  }
+}
+
+/* 防止与网站样式冲突 */
+#aescape-floating-ball,
+#aescape-floating-ball * {
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  text-indent: 0 !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  white-space: normal !important;
+  direction: ltr !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+#aescape-detail-panel,
+#aescape-detail-panel * {
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  text-indent: 0 !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  direction: ltr !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}

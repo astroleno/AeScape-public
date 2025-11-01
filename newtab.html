@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天景 AeScape</title>
+  <link rel="stylesheet" href="css/newtab.css">
+  <link rel="stylesheet" href="css/video-intro.css">
+</head>
+<body>
+  <!-- 开场防闪屏黑幕：0.2s 自动淡出并移除 -->
+  <div id="boot-mask" class="boot-mask"></div>
+  <!-- 视频动画容器 -->
+  <div id="video-container" class="video-container"></div>
+  
+  <!-- 动态背景层 -->
+  <div class="background-layer">
+    <div class="gradient-overlay"></div>
+  </div>
+
+  <!-- 主容器 -->
+  <div class="main-container">
+    <!-- 顶部状态栏 -->
+    <div class="status-bar">
+      <div class="location-info">
+        <span class="location-icon"></span>
+        <span class="location-name" id="location-name">获取位置中...</span>
+      </div>
+      <div class="settings-text" id="settings-btn">设置</div>
+    </div>
+
+    <!-- 中央内容区 -->
+    <div class="main-content">
+      <!-- 搜索容器 -->
+      <div class="search-container">
+        <div class="search-box">
+          <div class="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </div>
+          <input type="text" class="search-input" placeholder="搜索或输入网址..." id="search-input">
+        </div>
+        
+        <!-- 详细信息网格 - 移到快捷链接上方 -->
+        <div class="weather-details-grid" id="top-weather-details" style="display: none;">
+          <div class="detail-card">
+            <div class="detail-label">体感</div>
+            <div class="detail-value" id="feels-like-top">--°</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-label">湿度</div>
+            <div class="detail-value" id="humidity-top">--%</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-label">风速</div>
+            <div class="detail-value" id="wind-speed-top">-- km/h</div>
+          </div>
+        </div>
+        
+        <div class="quick-links" id="quick-links">
+          <!-- 快捷链接将由JS动态生成 -->
+        </div>
+      </div>
+
+      <!-- 时间显示 -->
+      <div class="time-container">
+        <div class="current-time" id="current-time">12:00</div>
+        <div class="current-date" id="current-date">今天</div>
+      </div>
+
+      <!-- 天气卡片 -->
+      <div class="weather-card-container">
+      <div class="weather-card">
+        <!-- 天气摘要（标题+城市+主信息） -->
+        <div class="weather-summary">
+          <div class="section-title">当前天气</div>
+          <div class="location-name" id="card-location-name">加载中...</div>
+          <div class="weather-main">
+          <div class="temperature-section">
+            <div class="current-temp" id="current-temp">--°</div>
+            <div class="weather-desc" id="weather-desc">天气加载中...</div>
+          </div>
+          <div class="weather-icon-section">
+            <div class="weather-icon" id="weather-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- 详细信息网格 - 只显示核心3项 -->
+        <div class="weather-details-grid">
+          <div class="detail-card">
+            <div class="detail-label">体感</div>
+            <div class="detail-value" id="feels-like">--°</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-label">湿度</div>
+            <div class="detail-value" id="humidity">--%</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-label">风速</div>
+            <div class="detail-value" id="wind-speed">-- km/h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- 悬浮操作按钮 -->
+  <div class="floating-actions">
+    <div class="action-button refresh-btn" id="refresh-btn" title="刷新天气">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+        <path d="M21 3v5h-5"></path>
+        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+        <path d="M3 21v-5h5"></path>
+      </svg>
+    </div>
+    <div class="action-button location-btn" id="location-btn" title="设置位置">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 设置面板 -->
+  <div class="settings-panel" id="settings-panel">
+    <div class="settings-content">
+      <div class="settings-header">
+        <h3>设置</h3>
+        <button class="close-btn" id="close-settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="settings-section">
+        <h4>API 配置</h4>
+        <div class="input-group">
+          <label for="api-key-input">OpenWeatherMap API Key</label>
+          <input type="password" id="api-key-input" placeholder="输入您的API Key">
+          <div class="button-group">
+            <button class="test-btn" id="test-api-key">测试API Key</button>
+            <button class="save-btn" id="save-api-key">保存</button>
+          </div>
+        </div>
+        <div class="help-text">
+          <a href="https://openweathermap.org/api" target="_blank">获取免费API Key →</a>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h4>位置设置</h4>
+        <div class="input-group">
+          <label for="city-input">城市名称</label>
+          <input type="text" id="city-input" placeholder="输入城市名称">
+          <button class="save-btn" id="set-location">设置位置</button>
+        </div>
+        <button class="auto-location-btn" id="auto-location">自动获取位置</button>
+      </div>
+
+      <div class="settings-section">
+        <h4>个性化</h4>
+        <div class="option-group">
+          <label class="option-item">
+            <input type="checkbox" id="dynamic-bg" checked>
+            <span>动态背景效果</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" id="particles" checked>
+            <span>天气粒子效果</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" id="auto-refresh" checked>
+            <span>自动刷新天气</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h4>视频动画</h4>
+        <div class="option-group">
+          <label class="option-item">
+            <input type="checkbox" id="video-animations" checked>
+            <span>启用天气视频动画</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" id="weather-change-trigger" checked>
+            <span>天气变化时触发</span>
+          </label>
+          <div class="row" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+            <label for="interval-trigger" style="min-width:120px;">间隔触发</label>
+            <select id="interval-trigger" style="flex:1; padding:6px 8px; border-radius:8px; border:1px solid #d9d9d9;">
+              <option value="off">关闭</option>
+              <option value="15">每15分钟</option>
+              <option value="30">每30分钟</option>
+              <option value="60">每60分钟</option>
+              <option value="90">每90分钟</option>
+              <option value="120">每120分钟</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 位置设置弹窗 -->
+  <div class="location-modal" id="location-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>设置位置</h3>
+        <button class="close-btn" id="close-location">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="search-city">
+          <input type="text" id="city-search" placeholder="搜索城市...">
+          <div class="city-results" id="city-results"></div>
+        </div>
+        <div class="current-location">
+                  <button class="use-current-btn" id="use-current-location">
+          <span class="text">使用当前位置</span>
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 通知提示 -->
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <span class="notification-icon"></span>
+      <span class="notification-text"></span>
+    </div>
+  </div>
+
+  <!-- 基础工具模块 -->
+  <script src="js/ErrorHandler.js"></script>
+  <script src="js/PerformanceMonitor.js"></script>
+  <script src="js/ConfigManager.js"></script>
+  <script src="js/VideoResourceManager.js"></script>
+  <script src="js/SmartThemeAdapter.js"></script>
+  
+  <!-- 核心功能模块 -->
+  <script src="js/icon-library.js"></script>
+  <script src="js/theme-system.js"></script>
+  <script src="js/VideoIntroAnimation.js"></script>
+  <script src="js/VideoWeatherManager.js"></script>
+  <script src="js/AnimationCardSystem.js"></script>
+  <script src="js/WeatherTriggerManager.js"></script>
+  <script src="js/weather-video-mapper.js"></script>
+  <script src="js/newtab.js"></script>
+</body>
+</html>

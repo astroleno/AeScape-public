@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天景 AeScape</title>
+  <style>
+    /* 最激进的CSS重置 - 从根源解决白边问题 */
+    *, *::before, *::after {
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      border: none !important;
+      outline: none !important;
+    }
+
+    /* 简化的根元素样式 */
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      width: 320px !important;
+      min-height: 480px !important;
+      overflow: visible !important;
+    }
+
+    :root {
+      /* 默认变量仅作占位，具体由 GlobalThemeManager/统一主题系统注入 */
+      --theme-gradient: transparent;
+      --theme-text: rgba(33, 33, 33, 0.92);
+    }
+
+    body {
+      width: 320px !important;
+      min-height: 480px !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', sans-serif !important;
+      background: var(--theme-gradient) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      color: var(--theme-text) !important;
+      font-weight: 300 !important;
+      border: none !important;
+      outline: none !important;
+      margin: 0 !important;
+      padding: 12px 12px 16px 12px !important;
+      overflow: visible !important;
+      line-height: 1.5 !important;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .header {
+      padding: 24px 20px 16px !important;
+      text-align: center !important;
+      border: none !important;
+      margin: 0 !important;
+    }
+
+    .logo {
+      font-size: 1.1rem !important;
+      font-weight: 500 !important;
+      margin-bottom: 2px !important;
+      opacity: 0.9 !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .content {
+      padding: 8px !important;
+      border: none !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+
+    .section {
+      padding: 16px !important;
+      margin: 0 !important;
+      border: none !important; /* 恢复：不加容器边框 */
+      background: none !important; /* 恢复：不加容器背景 */
+      border-radius: 0 !important; /* 恢复：无多余圆角容器 */
+      box-shadow: none !important; /* 恢复：无容器阴影 */
+    }
+
+    .section-title {
+      font-size: 0.9rem !important;
+      font-weight: 600 !important;
+      margin-bottom: 16px !important;
+      opacity: 0.9 !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .weather-info {
+      display: grid !important;
+      grid-template-columns: 40px 1fr !important;
+      align-items: center !important;
+      column-gap: 12px !important;
+      row-gap: 2px !important;
+      margin-bottom: 12px !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .weather-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .icon-button {
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+    }
+
+    .icon-button:hover {
+      background: rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .weather-icon {
+      font-size: 2rem;
+    }
+
+    .weather-details {
+      flex: 1;
+    }
+
+    .temperature {
+      font-size: 1.5rem;
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .description {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    .location-text {
+      font-size: 0.8rem !important;
+      opacity: 0.8 !important;
+      margin-bottom: 12px !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .stats {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px 12px !important;
+      font-size: 0.8rem !important;
+      line-height: 1.6 !important;
+      border: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .stat-item {
+      display: flex !important;
+      flex-direction: column !important;
+      text-align: center !important;
+      opacity: 0.9 !important;
+      padding: 8px 6px !important;
+      transition: all 200ms ease !important;
+      border: none !important;
+      background: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+    }
+
+    .stat-item:hover {
+      transform: none !important;
+      opacity: 0.9 !important;
+      background: none !important;
+    }
+
+    .stat-item span:first-child {
+      font-size: 0.7rem !important;
+      opacity: 0.6 !important;
+      margin-bottom: 4px !important;
+      font-weight: 400 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .stat-item span:last-child {
+      font-size: 0.85rem !important;
+      font-weight: 500 !important;
+      opacity: 0.95 !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .button {
+      width: 100% !important;
+      padding: 12px !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      border-radius: 12px !important;
+      background: rgba(0, 0, 0, 0.06) !important;
+      backdrop-filter: blur(10px) !important;
+      color: inherit !important;
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      margin-bottom: 8px !important;
+      margin-top: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      outline: none !important;
+    }
+
+    .button:hover {
+      background: rgba(0, 0, 0, 0.1) !important;
+      transform: translateY(-1px) !important;
+      border-color: rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .footer {
+      display: none !important;
+    }
+
+    /* 开关样式 */
+    .toggle-group {
+      margin-bottom: 12px;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+
+    .toggle-label input[type="checkbox"] {
+      display: none;
+    }
+
+    .toggle-slider {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-slider:before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-label input[type="checkbox"]:checked + .toggle-slider {
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .toggle-label input[type="checkbox"]:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">天景 AeScape</div>
+  </div>
+
+  <div class="content">
+    <div class="section">
+      <div class="weather-header">
+        <div class="section-title">当前天气</div>
+        <button class="icon-button" id="refresh-btn" title="刷新天气">
+          <!-- Icon will be set by JavaScript -->
+        </button>
+      </div>
+      
+      <div class="location-text" id="location-text">获取位置中...</div>
+      
+      <div class="weather-info">
+        <div class="weather-icon" id="weather-icon">
+          <!-- Weather icon will be set by JavaScript -->
+        </div>
+        <div class="weather-details">
+          <div class="temperature" id="temperature">--°</div>
+          <div class="description" id="weather-description">加载中...</div>
+        </div>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <span>体感</span>
+          <span id="feels-like">--°</span>
+        </div>
+        <div class="stat-item">
+          <span>湿度</span>
+          <span id="humidity">--%</span>
+        </div>
+        <div class="stat-item">
+          <span>风速</span>
+          <span id="wind-speed">--</span>
+        </div>
+        <div class="stat-item">
+          <span>能见度</span>
+          <span id="visibility">--</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="settings-header">
+        <div class="section-title">功能设置</div>
+        <button class="icon-button" id="open-settings" title="扩展设置">
+          <!-- Icon will be set by JavaScript -->
+        </button>
+      </div>
+      <div class="toggle-group">
+        <label class="toggle-label">
+          <span>悬浮球显示</span>
+          <input type="checkbox" id="floating-ball-toggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="js/icon-library.js"></script>
+  <script src="js/theme-system.js"></script>
+  <script src="js/popup.js"></script>
+</body>
+</html>
