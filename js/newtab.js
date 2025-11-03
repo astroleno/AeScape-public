@@ -419,19 +419,41 @@ class AeScapeNewTab {
     ).join('');
   }
 
-  // URL导航功能（已移除搜索功能以符合Chrome政策）
-  // 根据Chrome政策，新标签页扩展不应修改搜索体验
-  // 如需搜索，请使用浏览器地址栏，系统会使用您设置的默认搜索引擎
+  // 搜索和URL导航功能
+  // 使用Chrome Search API尊重用户选择的默认搜索引擎
+  // 根据Chrome政策，如果新标签页包含搜索，必须使用chrome.search API
   handleSearch(query) {
     if (!query) return;
 
-    // 只支持URL导航，不支持搜索功能
+    // 检查输入是否为URL
     if (this.isValidUrl(query)) {
       // 如果是有效URL，直接导航
       window.location.href = query.startsWith('http') ? query : `https://${query}`;
     } else {
-      // 如果不是URL，提示用户使用浏览器地址栏进行搜索
-      this.showNotification('info', '请输入有效网址，或使用浏览器地址栏进行搜索');
+      // 如果不是URL，使用Chrome Search API进行搜索
+      // 这会使用用户设置的默认搜索引擎
+      try {
+        // 检查是否有扩展上下文
+        if (this.hasExtensionContext() && chrome?.search?.query) {
+          chrome.search.query({
+            text: query,
+            disposition: 'NEW_TAB'  // 在新标签页中打开搜索结果
+          }, (results) => {
+            // 搜索已完成，Chrome会自动打开新标签页
+            if (chrome.runtime.lastError) {
+              console.error('Search error:', chrome.runtime.lastError);
+              this.showNotification('error', '搜索失败，请重试');
+            }
+          });
+        } else {
+          // 如果没有扩展上下文或API不可用，降级处理
+          console.warn('Chrome Search API not available, using fallback');
+          this.showNotification('info', '请使用浏览器地址栏进行搜索');
+        }
+      } catch (error) {
+        console.error('Failed to execute search:', error);
+        this.showNotification('error', '搜索功能暂时不可用');
+      }
     }
   }
 

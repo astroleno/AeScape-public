@@ -7,7 +7,8 @@
   "permissions": [
     "storage",
     "geolocation",
-    "activeTab"
+    "activeTab",
+    "search"
   ],
   
   "host_permissions": [
