@@ -419,14 +419,19 @@ class AeScapeNewTab {
     ).join('');
   }
 
-  // 搜索功能
+  // URL导航功能（已移除搜索功能以符合Chrome政策）
+  // 根据Chrome政策，新标签页扩展不应修改搜索体验
+  // 如需搜索，请使用浏览器地址栏，系统会使用您设置的默认搜索引擎
   handleSearch(query) {
     if (!query) return;
 
+    // 只支持URL导航，不支持搜索功能
     if (this.isValidUrl(query)) {
+      // 如果是有效URL，直接导航
       window.location.href = query.startsWith('http') ? query : `https://${query}`;
     } else {
-      window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      // 如果不是URL，提示用户使用浏览器地址栏进行搜索
+      this.showNotification('info', '请输入有效网址，或使用浏览器地址栏进行搜索');
     }
   }
 
@@ -542,14 +547,17 @@ class AeScapeNewTab {
       elements.icon.innerHTML = this.getSVGIcon(weatherCode, isNight);
     }
 
+    // 更新体感温度
     if (elements.feelsLike) {
       elements.feelsLike.textContent = `${Math.round(weather.env?.feelsLike || weather.env?.temperature || 0)}°`;
     }
 
+    // 更新湿度
     if (elements.humidity) {
       elements.humidity.textContent = `${weather.weather?.humidity || '--'}%`;
     }
 
+    // 更新风速
     if (elements.windSpeed) {
       const windKmh = Math.round((weather.weather?.windSpeedMps || 0) * 3.6);
       elements.windSpeed.textContent = `${windKmh} km/h`;

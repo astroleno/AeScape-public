@@ -40,25 +40,8 @@
               <path d="M21 21l-4.35-4.35"></path>
             </svg>
           </div>
-          <input type="text" class="search-input" placeholder="搜索或输入网址..." id="search-input">
+          <input type="text" class="search-input" placeholder="输入网址..." id="search-input">
         </div>
-        
-        <!-- 详细信息网格 - 移到快捷链接上方 -->
-        <div class="weather-details-grid" id="top-weather-details" style="display: none;">
-          <div class="detail-card">
-            <div class="detail-label">体感</div>
-            <div class="detail-value" id="feels-like-top">--°</div>
-          </div>
-          <div class="detail-card">
-            <div class="detail-label">湿度</div>
-            <div class="detail-value" id="humidity-top">--%</div>
-          </div>
-          <div class="detail-card">
-            <div class="detail-label">风速</div>
-            <div class="detail-value" id="wind-speed-top">-- km/h</div>
-          </div>
-        </div>
-        
         <div class="quick-links" id="quick-links">
           <!-- 快捷链接将由JS动态生成 -->
         </div>
@@ -100,7 +83,7 @@
           </div>
         </div>
 
-        <!-- 详细信息网格 - 只显示核心3项 -->
+        <!-- 详细信息网格 - 显示在天气信息下方，悬浮按钮上方 -->
         <div class="weather-details-grid">
           <div class="detail-card">
             <div class="detail-label">体感</div>

@@ -147,9 +147,11 @@ body.theme-ready .background-layer {
     "header"
     "main";
   grid-template-rows: auto 1fr;
-  align-items: center;
+  align-items: start;
+  align-content: start;
   justify-items: center;
-  padding: var(--spacing-xl) var(--spacing-xl) calc(var(--spacing-3xl) + 120px);
+  justify-content: center;
+  padding: var(--spacing-xl) var(--spacing-xl) calc(var(--spacing-3xl) + 160px + env(safe-area-inset-bottom, 0px));
   gap: 0;
   max-width: 1200px;
   margin: 0 auto;
@@ -161,12 +163,14 @@ body.theme-ready .background-layer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  min-height: 100%;
   width: 100%;
   max-width: 600px;
   gap: 0;
   animation: fadeInSoft 1400ms cubic-bezier(0.23, 1, 0.32, 1) 200ms both;
-  padding-bottom: calc(var(--spacing-3xl) + 80px);
+  padding-bottom: clamp(160px, 18vh, 260px);
 }
 
 /* 顶部状态栏 - 极简设计 */
@@ -221,7 +225,7 @@ body.theme-ready .background-layer {
 .time-container {
   text-align: center;
   order: 2;
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-lg); 
   margin-bottom: var(--spacing-xl);
 }
 
@@ -245,17 +249,17 @@ body.theme-ready .background-layer {
 .weather-card-container {
   width: 100%;
   order: 3;
-  margin-bottom: calc(var(--spacing-2xl) + 96px);
+  margin-bottom: 0;
 }
 
 .weather-card {
   text-align: center;
-  padding: var(--spacing-lg) 0 calc(var(--spacing-3xl) + 96px);
+  padding: var(--spacing-lg) 0;
   background: none;
   border: none;
   box-shadow: none;
   display: grid;              /* 强制所有直接子项居中 */
-  justify-items: center;      /* 包括“当前天气/Shanghai”等块级元素 */
+  justify-items: center;      /* 包括"当前天气/Shanghai"等块级元素 */
   row-gap: var(--spacing-lg);
 }
 
@@ -288,7 +292,7 @@ body.theme-ready .background-layer {
   align-items: center;
   justify-content: center; /* 维持整体居中 */
   column-gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .temperature-section {
@@ -327,11 +331,8 @@ body.theme-ready .background-layer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
-}
-
-#top-weather-details {
-  margin-top: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  /* margin-top: var(--spacing-lg); */
+  margin-bottom: calc(var(--spacing-3xl) + 120px + env(safe-area-inset-bottom, 0px));
 }
 
 .detail-card {
@@ -424,7 +425,7 @@ body.theme-ready .background-layer {
   gap: var(--spacing-lg);
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: var(--spacing-xs);
+  margin-top: 0;
   margin-bottom: 0;
 }
 
@@ -450,7 +451,7 @@ body.theme-ready .background-layer {
   position: fixed;
   left: 50%; /* 居中对齐 */
   transform: translateX(-50%);
-  bottom: var(--spacing-lg);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--spacing-sm) + 12px);
   display: flex;
   flex-direction: row; /* 居中时按钮横向排布，更稳定 */
   gap: var(--spacing-md);
@@ -900,7 +901,7 @@ body.theme-ready .background-layer {
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .main-container {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-lg) calc(var(--spacing-3xl) + 140px + env(safe-area-inset-bottom, 0px));
     gap: var(--spacing-md);
   }
   
@@ -909,13 +910,14 @@ body.theme-ready .background-layer {
   }
   
   .weather-details-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: calc(var(--spacing-3xl) + 140px + env(safe-area-inset-bottom, 0px));
   }
 }
 
 @media (max-width: 768px) {
   .main-container {
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-md) calc(var(--spacing-3xl) + 160px + env(safe-area-inset-bottom, 0px));
     gap: var(--spacing-sm);
   }
   
@@ -935,10 +937,11 @@ body.theme-ready .background-layer {
   .weather-details-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+    margin-bottom: calc(var(--spacing-3xl) + 160px + env(safe-area-inset-bottom, 0px));
   }
   
   .floating-actions {
-    bottom: var(--spacing-lg);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--spacing-sm) + 12px);
     right: var(--spacing-lg);
   }
   
